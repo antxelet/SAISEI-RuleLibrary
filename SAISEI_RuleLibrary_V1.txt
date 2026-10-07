@@ -1,6 +1,6 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-10-04
-# Verified against official firm sources on 2026-10-04.
+# LIBRARY_VERSION=2026-10-07
+# Verified against official firm sources through 2026-10-07.
 #
 # IMPORTANT - V1 ENFORCEMENT SCOPE:
 #   - dailyProfit (0 = no official positive daily lock encoded)
@@ -17,13 +17,15 @@
 #
 # Alpha Premium was officially discontinued 2026-07-12 and is intentionally absent.
 #
-# NEWS verification 2026-10-04:
+# NEWS verification:
 #   - Lucid Flex: news trading allowed.
 #   - Alpha: all Evaluations + Advanced Qualified unrestricted.
 #     Zero/Standard/Direct Qualified: no order executions from 2 min before
 #     through 2 min after relevant Forex Factory High-impact events; holding allowed.
 #   - Tradeify: news trading allowed without news-specific restrictions.
-#   - LucidDaily is NOT in the current 50K profile set; its funded news rule is not encoded here.
+#   - LucidLive: no separate news restriction encoded in this V1 update.
+#   - LucidDaily funded is still not encoded; official rule requires flat from
+#     1 minute before through 1 minute after U.S. High-impact USD news.
 #
 # L|profileId|version|verified|dailyProfit|dailyLoss
 # LI|profileId|instrument|max|ALLOW/BLOCK
@@ -34,8 +36,16 @@
 #   BLOCK_EXEC = SAISEI must block/cancel its NEW ENTRY orders in the encoded window.
 #                Holding an existing position is allowed unless a future mode says otherwise.
 #   AUTO currencies = currencies relevant to the traded instrument (e.g. NQ -> USD).
+#
+# LUCIDLIVE 50K (verified 2026-10-07):
+#   Starting Live Drawdown = $2,000; EOD drawdown; NO daily loss limit.
+#   No consistency requirement at Live.
+#   Scaling is recalculated at end of each trading day and may move up or down.
+#   CME/CBOT/NYMEX: T1 $0-$1,999.99 = 2/20; T2 $2,000-$3,999 = 3/30; T3 $4,000+ = 4/40.
+#   COMEX:          T1 = 1/10; T2 = 1/15; T3 = 2/20.
+#   V1 does NOT auto-detect tiers; select the correct Live tier/profile manually.
 
-# Lucid Flex 50K Evaluation: max 4 mini/40 micro. DLL is optional at checkout and is NOT encoded in AUTO V1.
+# Lucid Flex 50K Evaluation: max 4 mini/40 micro. DLL optional at checkout and NOT encoded in AUTO V1.
 L|LUCID_FLEX_50K_EVAL|2026-10-03|true|0|0
 LN|LUCID_FLEX_50K_EVAL|true|ALLOW|HIGH|0|0|AUTO
 LI|LUCID_FLEX_50K_EVAL|NQ|4|ALLOW
@@ -98,6 +108,54 @@ LI|LUCID_FLEX_50K_FUNDED_T3|MYM|40|ALLOW
 LI|LUCID_FLEX_50K_FUNDED_T3|M2K|40|ALLOW
 LI|LUCID_FLEX_50K_FUNDED_T3|MGC|40|ALLOW
 LI|LUCID_FLEX_50K_FUNDED_T3|MCL|40|ALLOW
+
+# LucidLive 50K Tier 1: live profit $0-$1,999.99. EOD MLL starts $2,000; no DLL. COMEX reduced sizing.
+L|LUCID_LIVE_50K_T1|2026-10-07-T1|true|0|0
+LN|LUCID_LIVE_50K_T1|true|ALLOW|HIGH|0|0|AUTO
+LI|LUCID_LIVE_50K_T1|NQ|2|ALLOW
+LI|LUCID_LIVE_50K_T1|ES|2|ALLOW
+LI|LUCID_LIVE_50K_T1|YM|2|ALLOW
+LI|LUCID_LIVE_50K_T1|RTY|2|ALLOW
+LI|LUCID_LIVE_50K_T1|GC|1|ALLOW
+LI|LUCID_LIVE_50K_T1|CL|2|ALLOW
+LI|LUCID_LIVE_50K_T1|MNQ|20|ALLOW
+LI|LUCID_LIVE_50K_T1|MES|20|ALLOW
+LI|LUCID_LIVE_50K_T1|MYM|20|ALLOW
+LI|LUCID_LIVE_50K_T1|M2K|20|ALLOW
+LI|LUCID_LIVE_50K_T1|MGC|10|ALLOW
+LI|LUCID_LIVE_50K_T1|MCL|20|ALLOW
+
+# LucidLive 50K Tier 2: live profit $2,000-$3,999. EOD tier recalculated daily; no DLL. COMEX reduced sizing.
+L|LUCID_LIVE_50K_T2|2026-10-07-T2|true|0|0
+LN|LUCID_LIVE_50K_T2|true|ALLOW|HIGH|0|0|AUTO
+LI|LUCID_LIVE_50K_T2|NQ|3|ALLOW
+LI|LUCID_LIVE_50K_T2|ES|3|ALLOW
+LI|LUCID_LIVE_50K_T2|YM|3|ALLOW
+LI|LUCID_LIVE_50K_T2|RTY|3|ALLOW
+LI|LUCID_LIVE_50K_T2|GC|1|ALLOW
+LI|LUCID_LIVE_50K_T2|CL|3|ALLOW
+LI|LUCID_LIVE_50K_T2|MNQ|30|ALLOW
+LI|LUCID_LIVE_50K_T2|MES|30|ALLOW
+LI|LUCID_LIVE_50K_T2|MYM|30|ALLOW
+LI|LUCID_LIVE_50K_T2|M2K|30|ALLOW
+LI|LUCID_LIVE_50K_T2|MGC|15|ALLOW
+LI|LUCID_LIVE_50K_T2|MCL|30|ALLOW
+
+# LucidLive 50K Tier 3: live profit $4,000+. Max standard size 4 mini/40 micro; COMEX max 2/20; no DLL.
+L|LUCID_LIVE_50K_T3|2026-10-07-T3|true|0|0
+LN|LUCID_LIVE_50K_T3|true|ALLOW|HIGH|0|0|AUTO
+LI|LUCID_LIVE_50K_T3|NQ|4|ALLOW
+LI|LUCID_LIVE_50K_T3|ES|4|ALLOW
+LI|LUCID_LIVE_50K_T3|YM|4|ALLOW
+LI|LUCID_LIVE_50K_T3|RTY|4|ALLOW
+LI|LUCID_LIVE_50K_T3|GC|2|ALLOW
+LI|LUCID_LIVE_50K_T3|CL|4|ALLOW
+LI|LUCID_LIVE_50K_T3|MNQ|40|ALLOW
+LI|LUCID_LIVE_50K_T3|MES|40|ALLOW
+LI|LUCID_LIVE_50K_T3|MYM|40|ALLOW
+LI|LUCID_LIVE_50K_T3|M2K|40|ALLOW
+LI|LUCID_LIVE_50K_T3|MGC|20|ALLOW
+LI|LUCID_LIVE_50K_T3|MCL|40|ALLOW
 
 # Alpha Zero 50K Evaluation: DLG $1,000; max 3 mini/30 micro.
 L|ALPHA_ZERO_50K_EVAL|2026-10-03|true|0|-1000
