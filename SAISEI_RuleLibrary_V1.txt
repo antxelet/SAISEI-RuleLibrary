@@ -1,6 +1,6 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-10-07
-# Verified against official firm sources through 2026-10-07.
+# LIBRARY_VERSION=2026-10-09
+# Targeted official rule review: 2026-10-09; existing profile values preserved.
 #
 # IMPORTANT - V1 ENFORCEMENT SCOPE:
 #   - dailyProfit (0 = no official positive daily lock encoded)
@@ -26,6 +26,31 @@
 #   - LucidLive: no separate news restriction encoded in this V1 update.
 #   - LucidDaily funded is still not encoded; official rule requires flat from
 #     1 minute before through 1 minute after U.S. High-impact USD news.
+#
+# 2026-10-09 SAFETY CLARIFICATIONS (comments only; parser format unchanged):
+# TRADEIFY GROWTH / LIGHTNING 50K FUNDED:
+#   Library dailyLoss=-1250 is the INITIAL, conservative limit.
+#   Official modern accounts: DLL increases to $2000 after reaching $53000
+#   (6% profit); effective NEXT trading session, 6:00 PM ET.
+#   Legacy accounts bought before 2025-09-12 08:00 EST may instead REMOVE DLL.
+#   V1 cannot auto-select by account vintage or detect this threshold.
+#   DO NOT manually change dailyLoss to -2000 without verifying eligibility.
+#   Source: https://help.tradeify.co/en/articles/10468321-rules-daily-loss-limit
+# TRADEIFY SELECT FLEX / DAILY 50K FUNDED:
+#   Tier advancement is retained once unlocked (highest attained tier),
+#   not automatically downgraded solely because current balance falls.
+#   V1 tiers remain MANUALLY selected; no persistent peak-tier tracking.
+#   Verify tier from Tradeify dashboard before changing SAISEI profile.
+# ALPHA ZERO / STANDARD / DIRECT QUALIFIED NEWS:
+#   Existing BLOCK_EXEC|HIGH|2|2|AUTO is an ENTRY-ORDER safety guard.
+#   Official rule says NO ORDERS MAY BE EXECUTED within +/-2 min of
+#   relevant ForexFactory high-impact news, though holding is permitted.
+#   This guard does NOT guarantee that protective SL/TP cannot execute.
+#   NEVER cancel protective stops to satisfy the news guard; obtain
+#   clarification from Alpha about protective-order fills before changing
+#   enforcement semantics. Possible payout denial / account breach.
+#   Source: https://help.alpha-futures.com/en/articles/9492063-news-trading-policy
+# NOTE: The above describes documented constraints, not new Core features.
 #
 # L|profileId|version|verified|dailyProfit|dailyLoss
 # LI|profileId|instrument|max|ALLOW/BLOCK
