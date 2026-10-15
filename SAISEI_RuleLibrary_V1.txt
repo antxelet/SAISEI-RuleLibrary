@@ -1,7 +1,43 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-10-13
+# LIBRARY_VERSION=2026-10-15
 # Targeted official rule review: 2026-10-13; prior 50 profiles preserved.
 # LucidMaxx NEW and LEGACY documented separately; NEW Live tiers added.
+#
+# 2026-10-15 LUCID LIVE MLL CLARIFICATION (DOCUMENTATION ONLY):
+# LUCID_LIVE_50K_T1/T2/T3: EOD starting MLL drawdown $2000; no DLL.
+# MLL locks at $100 once cumulative live profits equal initial live drawdown.
+# IMPORTANT: requesting a payout BEFORE that profit threshold ALSO locks MLL at $100.
+# SAISEI V1 DOES NOT TRACK OR ENFORCE THIS MLL; use independent monitoring.
+# Source: https://support.lucidtrading.com/en/articles/16558826-new-live-structure
+#
+# FTMO / EARN2TRADE RESEARCHED 2026-10-15: REFERENCE-ONLY, NOT ACTIVE PROFILES.
+# No L|/LI| records added: do NOT activate accounts with unverified instrument,
+# platform, sizing, and phase-specific risk mappings. The current V1 format
+# cannot safely express equity-based floating PnL breaches, dynamic ladder,
+# or the correct phase-specific session/reset and news exceptions.
+#
+# FTMO CFD (MT4/MT5/cTrader etc.) IS NOT FTMO FUTURES (NinjaTrader compatibility
+# must be verified independently). CFD 2-Step: 5% maximum daily loss, 10% static
+# maximum loss, 4 minimum trading days per evaluation phase, reset 00:00 CE(S)T.
+# CFD 1-Step: 3% maximum daily loss; 10% EOD trailing maximum loss;
+# 50% consistency on eligible accounts opened from orders on/after 2026-10-12
+# or merged on/after that date. Legacy Best Day formula differs.
+# FTMO also offers separate Futures products with distinct contract/scaling
+# and daily loss rules: NEVER copy CFD settings into Futures profiles.
+# Source: https://ftmo.com/en/trading-objectives/
+# Futures source: https://ftmo.com/en/futures/trading-objectives-and-rules/
+#
+# EARN2TRADE: Gauntlet Mini and Trader Career Path evaluation rules include
+# daily loss, EOD drawdown, progression ladder, approved trading times,
+# consistency. 30% consistency; no fixed minimum trading-day requirement,
+# but typically >=4 profitable days needed to meet 30% consistency.
+# Daily loss counts open+closed PnL and commissions; 17:00-17:00 US Central.
+# Progression Ladder is account-balance/profit dependent in real time.
+# Up to 10 listed micro contracts count as one standard contract for ladder.
+# Do not encode static limits without account size and current ladder tier.
+# Source: https://help.earn2trade.com/en/articles/5941958-what-are-the-evaluation-rules
+# Source: https://help.earn2trade.com/en/articles/3292351-what-is-the-progression-ladder-in-the-gauntlet-mini
+# Source: https://help.earn2trade.com/en/articles/3395926-how-is-my-daily-loss-calculated
 #
 # IMPORTANT - V1 ENFORCEMENT SCOPE:
 #   - dailyProfit (0 = no official positive daily lock encoded)
@@ -548,7 +584,7 @@ LI|TRADEIFY_LIGHTNING_50K_FUNDED|MGC|40|ALLOW
 LI|TRADEIFY_LIGHTNING_50K_FUNDED|MCL|40|ALLOW
 
 # ============================================================================
-# TRADEIFY SELECT 300K — V1 LEGACY / V2 CURRENT (verified 2026-10-13)
+# TRADEIFY SELECT 300K â€” V1 LEGACY / V2 CURRENT (verified 2026-10-13)
 # Official: https://help.tradeify.co/en/articles/16497699-300k-select-account
 # V1 purchased before 2026-08-27; V2 purchased on/after 2026-08-27.
 # Both: evaluation target $14000, 40% consistency, minimum 3 trading days;
