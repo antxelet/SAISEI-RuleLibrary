@@ -1,5 +1,31 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-10-20
+# LIBRARY_VERSION=2026-10-26
+# 2026-10-26 ALPHA FUTURES: AUTOMATION / COPY TRADING (DOCUMENTATION ONLY)
+# Same-owner copy trading may be allowed subject to Alpha's current policies.
+# Fully autonomous strategy execution and prohibited hedging remain restricted.
+# Semi-automated workflows require careful review; confirm the exact SAISEI
+# Core behavior (manual leader, SL/TP, OCO, forced liquidation) with Alpha.
+# Do not infer that every automatic risk-control action is approved.
+# Alpha flags excessive high-frequency trading and micro-scalping patterns;
+# no safe universal minimum holding period is established here.
+# Core V1 does not enforce ownership, automation classification, HFT patterns,
+# or cross-account hedging. No changes to L|, LI|, LN| records.
+# Official sources:
+# https://help.alpha-futures.com/en/articles/9508585-prohibited-trading-practices
+# https://help.alpha-futures.com/en/articles/10573989-copy-trading
+#
+# 2026-10-21 ALPHA CONSISTENCY (COMMENTS ONLY; NOT ENFORCED BY CORE V1)
+# Evaluation: Zero none; Standard 50%; Advanced 40%.
+# Qualified: Zero 40%; Standard 40%; Advanced none; Direct 20%.
+# Qualified consistency affects payout eligibility, not automatic breach.
+# https://help.alpha-futures.com/en/articles/9492048-consistency-rule
+# 2026-10-21 ALPHA DIRECT 50K QUALIFIED PAYOUT AMBIGUITY:
+# Official maximum withdrawal pages differ ($1500 vs $2000); obtain written
+# clarification. Do not encode either payout cap as an enforced Core limit.
+# https://help.alpha-futures.com/en/articles/10491202-maximum-withdrawal-request
+# https://help.alpha-futures.com/en/articles/9492051-payout-policy
+# https://help.alpha-futures.com/en/articles/15838742-direct-account-overview
+#
 # 2026-10-20 INTEGRATION: FTMO FUTURES + EARN2TRADE FUTURES ONLY.
 # FTMO FUTURES: Growth/Pro 50K,100K,150K EVAL and SimFunded manual tiers.
 # FTMO: limits are ACCOUNT-WIDE equivalent mini exposure; LI per-instrument
