@@ -1,30 +1,282 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-10-26
-# 2026-10-26 ALPHA FUTURES: AUTOMATION / COPY TRADING (DOCUMENTATION ONLY)
-# Same-owner copy trading may be allowed subject to Alpha's current policies.
-# Fully autonomous strategy execution and prohibited hedging remain restricted.
-# Semi-automated workflows require careful review; confirm the exact SAISEI
-# Core behavior (manual leader, SL/TP, OCO, forced liquidation) with Alpha.
-# Do not infer that every automatic risk-control action is approved.
-# Alpha flags excessive high-frequency trading and micro-scalping patterns;
-# no safe universal minimum holding period is established here.
-# Core V1 does not enforce ownership, automation classification, HFT patterns,
-# or cross-account hedging. No changes to L|, LI|, LN| records.
-# Official sources:
+# LIBRARY_VERSION=2026-10-28
+# 2026-10-28 OFFICIAL RULE REVIEW - NEW MATERIAL OMISSIONS (COMMENTS ONLY)
+# Review baseline: GitHub main blob SHA d078481292b7264d49bf35f36ed376def552c824
+# (LIBRARY_VERSION=2026-10-26) + documented 2026-10-27 draft.
+# The underlying GitHub operational rows are unchanged; this update adds
+# ONLY official-source documentation and Core V1 enforcement warnings.
+# Source publication dates below are NOT dates when a rule newly took effect.
+#
+# LUCID ALL EVALUATION AND FUNDED ACCOUNTS - MICROSCALPING RISK:
+# PRIOR GitHub/2026-10-27 draft: did not document Lucid's specific 5-second
+# microscalping detection threshold (Tradeify's >10-second payout test is
+# a DIFFERENT rule and must NOT be applied to Lucid).
+# VERIFIED 2026-10-28: if MORE THAN 50% of account profits come from trades
+# held for 5 seconds OR LESS, Lucid flags the account for MANUAL review.
+# This is NOT an automatic hard breach or a general ban on genuine scalping.
+# If bad-faith activity is confirmed, Lucid may issue a warning; continued
+# flagged behavior after warning can forfeit microscalping profits and
+# result in permanent restriction. Definition/calculation of profit share
+# is not detailed in the article: do NOT assume a Core-calculated percentage
+# exactly reproduces Lucid's surveillance methodology.
+# Core V1 cannot calculate trade-duration profit shares or prevent such
+# patterns; traders using 5-second charts must track actual HOLD duration.
+# Official article published 2026-08-26, reviewed 2026-10-28:
+# https://support.lucidtrading.com/en/articles/11404742-prohibited-microscalping
+#
+# LUCID ALL ACCOUNTS - HIGH FREQUENCY TRADING:
+# PRIOR GitHub/2026-10-27 draft: no explicit Lucid HFT enforcement ladder.
+# VERIFIED: Lucid prohibits HFT; first offense can produce a written warning;
+# repeated offenses can forfeit HFT profits, close accounts and permanently
+# restrict service. The article does NOT set a safe numeric trades/day cap.
+# Do not confuse manual scalping with prohibited automated HFT patterns.
+# Core V1 does not classify HFT/order-rate behavior or enforce Lucid reviews.
+# Official article published 2026-08-26, reviewed 2026-10-28:
+# https://support.lucidtrading.com/en/articles/11404736-prohibited-high-frequency-trading
+#
+# LUCID ALL ACTIVE ACCOUNTS - INACTIVITY AND BREACHED EVAL RETENTION:
+# PRIOR GitHub/2026-10-27 draft: no inactivity/deletion timeline documented.
+# VERIFIED: no daily or weekly minimum trading frequency; however, accounts
+# without a trade generating at least +/-$1 net PnL within 30 CALENDAR DAYS
+# are deemed abandoned and permanently deleted. Breached evaluations are
+# deleted after 30 days if not reset. Confirm exact account status in Lucid.
+# Core V1 does not enforce inactivity deadlines or manage evaluation resets.
+# Official article published 2026-08-26, reviewed 2026-10-28:
+# https://support.lucidtrading.com/en/articles/11404632-inactivity-policy
+#
+# LUCID_FLEX_50K_FUNDED(_T2/_T3) - PAYOUT CAP AND LIVE TRANSITION:
+# PRIOR GitHub/2026-10-27 draft: noted 5 winning days >=$150, positive cycle
+# profit, optional on-demand payout, but did not specify payout min/max.
+# VERIFIED: payout minimum $500; payout maximum 50% of profit capped at
+# $2000 PER REQUEST for a 50K Flex, no payout buffer, 90/10 split, maximum
+# five payout requests. Payout request is final once submitted; trading
+# before processing can jeopardize eligibility if account balance falls.
+# AMBIGUITY: LucidFlex payout article says traders move live after payout 5;
+# newer standard Live structure says payout 5 triggers risk-team LIVE REVIEW
+# and transition remains discretionary. Do NOT promise automatic Live status.
+# Core V1 cannot track payout caps, requests, eligibility or live reviews.
+# Official LucidFlex payout article published 2026-07-28, reviewed 2026-10-28:
+# https://support.lucidtrading.com/en/articles/12945796-lucidflex-payouts
+# Official Live structure reviewed 2026-10-28:
+# https://support.lucidtrading.com/en/articles/16558826-new-live-structure
+#
+# TRADEIFY_LIGHTNING_50K_FUNDED AND 100K LIGHTNING (REFERENCE ONLY):
+# PRIOR GitHub/2026-10-27 draft: documented 50K initial DLL, position limits,
+# 6%-profit DLL adjustment, general microscalping, but not Lightning's
+# per-payout PROFIT GOALS versus WITHDRAWAL CAPS or vintage consistency.
+# VERIFIED FOR ACCOUNTS PURCHASED AFTER 2025-09-12 08:00 ET:
+# 50K: new profit goal $3000 for payout 1, $2000 for each later payout;
+# max payout $2000 for requests 1-3, $2500 for request 4+.
+# 100K: new profit goal $6000 for payout 1, $3500 for each later payout;
+# max payout $2500 for requests 1-3, $3000 for request 4+.
+# Consistency: 20% for payout 1, 25% payout 2, 30% payout 3+;
+# NO fixed minimum trading days. Payout minimum $1000; trader split 90%.
+# Each payout resets the NEW-profit goal and consistency cycle; previously
+# retained profits do NOT count toward the NEXT payout's fresh-profit goal.
+# LEGACY accounts before cutoff: 20% consistency for ALL payouts and
+# different 100K goals ($6000/$3000/$2500 for payout 1/2/3+). Exact cutoff
+# at 08:00 ET should be checked in dashboard for accounts bought that day.
+# 100K Lightning is documented for reference; do NOT create new L|/LI|/LN|
+# rows without confirming account model, contract caps and Core semantics.
+# Core V1 cannot enforce payout tiers, per-cycle consistency, account vintage
+# or payout approval; max 5 combined Tradeify sim funded accounts also applies.
+# Official payout policy reviewed 2026-10-28 (updated over a week ago):
+# https://help.tradeify.co/en/articles/10495932-lightning-funded-account-payout-policy
+#
+# ALPHA FUTURES: rechecked official evaluation/qualified rules for contracts,
+# scaling, DLL/MLL, news, session close, consistency, minimum days, payout,
+# manual-copy/automation and prohibited strategies on 2026-10-28; no NEW
+# verified material change beyond 2026-10-26/27 documentation.
+# References:
+# https://help.alpha-futures.com/en/articles/9508585-prohibited-trading-practices
+# https://help.alpha-futures.com/en/articles/10573989-copy-trading
+# https://help.alpha-futures.com/en/articles/9492063-news-trading-policy
+# https://help.alpha-futures.com/en/articles/9492051-payout-policy
+#
+# GENERAL VALIDATION 2026-10-28:
+# No L|/LI|/LN| edits; all 83 L| profiles, 996 LI| instrument limits and
+# 83 LN| news rules preserved. FTMO FUTURES and EARN2TRADE FUTURES notes
+# retained; NO CFD additions. V1 cannot enforce dynamic EOD MLL, combined
+# contract equivalence, scaling tiers, time-of-day close, duration-based
+# profit ratios, consistency, minimum days or payout-cycle rules.
+# The 1,162 operational rows match GitHub SHA above (FNV64 a21b4d1d1d47c02d).
+# GitHub was NOT modified; this is a downloadable REVIEW DRAFT only.
+#
+# 2026-10-27 OFFICIAL RULE REVIEW - MATERIAL OMISSIONS, COMMENTS ONLY
+# Source of operational rows: GitHub main SAISEI_RuleLibrary_V1.txt
+# GitHub blob SHA reviewed: d078481292b7264d49bf35f36ed376def552c824
+# The 1,162 L|/LI|/LN| rows match that GitHub blob exactly (FNV64
+# a21b4d1d1d47c02d); existing expanded documentation retained.
+# This revision adds references and clarifications only, NO operational changes.
+#
+# LUCID_FLEX_50K_EVAL / LUCID_FLEX_50K_FUNDED(_T2/_T3):
+# PRIOR library: DLL optional at purchase, but no full configuration/payout note.
+# VERIFIED: four purchase combinations: DLL ON/OFF x evaluation consistency
+# 40% standard or 50% add-on. Funded Flex has NO consistency requirement.
+# DLL ON applies in BOTH eval and funded; it is a SOFT lock until next session.
+# DLL ON funded enables on-demand INTRADAY payout requests from session profit
+# during 18:00-15:45 ET; after requesting, trading pauses for the day.
+# DLL OFF funded uses the normal end-of-day payout request schedule.
+# Existing payout eligibility (e.g., 5 winning days, net cycle profit) still
+# applies; on-demand does NOT waive other payout requirements.
+# Settings are fixed at checkout and cannot be switched on active accounts.
+# Core V1 AUTO cannot determine checkout DLL/consistency variant or enforce
+# the intraday payout pause. Verify the account option in Lucid dashboard;
+# personal risk limits remain advisable, particularly for DLL OFF.
+# Official review 2026-10-27; article updated this week:
+# https://support.lucidtrading.com/en/articles/16226050-lucidflex-customization
+# https://support.lucidtrading.com/en/articles/12945796-lucidflex-payouts
+#
+# LUCID_LIVE_50K_T1/T2/T3 (and standard NEW Lucid Live, NOT Maxx):
+# PRIOR library: $2000 starting EOD MLL, MLL lock at $100, no DLL;
+# repeatable bonus and optional live-transition cashout not documented.
+# VERIFIED NEW structure: traders offered a live transition may choose a
+# cashout option equal to 50% of their 'live starting balance', with 90/10
+# profit split, WITHIN 24 HOURS of the move-to-live email; no response means
+# automatic Live transition. CAUTION: same official page says standard live
+# accounts start with $0 balance. Cashout calculation basis is AMBIGUOUS:
+# obtain Lucid's written amount before relying on this option.
+# Standard NEW 50K Live repeatable bonus: 20 qualifying trading days and
+# $4000 Live profit target for $2000 bonus (90/10 split). Qualifying day:
+# >=1 trade and end-of-day net PnL of at least +$1 or at most -$1 (fees net).
+# Live bonus target is not reduced by payouts. Not an automatic entitlement.
+# Live move can close all sim accounts; ineligible funded accounts' eval
+# fees refundable only if >=50% of original drawdown remains; verify status.
+# Core V1 does not enforce live cashout deadlines, bonus, payout eligibility,
+# household restrictions, live MLL lock, or transfer eligibility.
+# Official review 2026-10-27:
+# https://support.lucidtrading.com/en/articles/16558826-new-live-structure
+#
+# TRADEIFY_SELECT_FLEX_50K_T1/T2/T3 and SELECT_DAILY_50K_T1/T2/T3:
+# PRIOR library: payout cap differences by purchase date not documented.
+# VERIFIED cutoff in official page: BEFORE vs AFTER Sep 1, 2026;
+# exact Sep 1 purchase-time boundary is not explicit (confirm if purchased
+# on that date). Flex 50K: max 50% of TOTAL account profit per request,
+# cap $3000 before / $2500 after; 5 winning days of >=$150 per cycle,
+# no DLL or payout buffer. Subsequent cycles require positive net PnL.
+# Daily 50K: payout max = min(2x positive net NEW cycle profit, date cap,
+# available funds above buffer); cap $1000 before / $1250 after;
+# minimum request $250, $2100 profit buffer, DLL $1000, no consistency.
+# Daily has no 5-winning-day requirement. Both payout options use 90/10.
+# The Flex/Daily choice after evaluation is permanent for that account.
+# 50K EOD drawdown lock to $50100 may occur upon payout request even
+# before EOD balance reaches $52100. This can reduce remaining risk room.
+# Core V1 cannot track purchase vintage, payout cycles, profit buffer,
+# drawdown lock, or irreversible funded payout-policy selection.
+# Official review 2026-10-27; policy includes Sep 1, 2026 cutoff:
+# https://help.tradeify.co/en/articles/12853966-select-flex-and-select-daily-payout-policies
+# https://help.tradeify.co/en/articles/12853921-select-evaluation-accounts
+#
+# ALPHA_* EVAL/QUAL: MATERIAL RISK OMISSIONS (REFERENCE ONLY):
+# PRIOR library: no explicit close-by time or CME price-limit proximity.
+# VERIFIED: all positions must be flat BEFORE 16:20 Eastern time daily;
+# Alpha says it will liquidate positions left open, but this is NOT a
+# substitute for closing them. No overnight/swing positions.
+# Alpha forbids trading within 2 percentage points of a CME price limit
+# on ALL accounts. Example for 7% equity-index overnight limit: do not
+# trade once net change is at or beyond +/-5% from reference settlement.
+# This is product/session-specific; consult current CME price limits.
+# MBT/MET crypto micros are counted as FULL mini contracts by Alpha.
+# Core V1 does not enforce close-by deadlines, session-specific CME limit
+# proximity, or special mini-equivalent conversions for MBT/MET.
+# Official review 2026-10-27 (source articles July 17, 2026 / Aug 30, 2024):
+# https://help.alpha-futures.com/en/articles/9492096-what-and-when-you-can-trade
+# https://help.alpha-futures.com/en/articles/9806068-price-limit-trading
+#
+# ALPHA FUTURES PLATFORM COMPATIBILITY - IMPORTANT FOR SAISEI CORE:
+# Official platform list as reviewed 2026-10-27: AlphaTrader, TradingView
+# (Plus500), WealthCharts, Deepchart, Quantower. NinjaTrader is NOT listed.
+# Platform choices cannot be interchanged after purchase. Do not assume
+# a new Alpha account can connect to NinjaTrader/SAISEI Core. Existing
+# legacy connectivity must be confirmed directly with Alpha; no automatic
+# platform migration or new executable profiles are introduced here.
+# Official: https://help.alpha-futures.com/en/articles/10525305-trading-platforms
+#
+# TRADEIFY GENERAL: VERIFIED RESTRICTIONS (NO EXECUTABLE CHANGES):
+# Regular close by 16:45 ET; holiday early close by 12:59 ET;
+# trading session starts 18:00 ET. No holding overnight.
+# Trading activity >=1 trade per week (Monday-Friday); funded payout
+# requires >50% of trades AND >50% of profits from holds >10 seconds.
+# Algorithmic trading permitted only for exclusively owned, non-shared,
+# non-HFT strategies, with proof of ownership if requested; HFT bots banned.
+# Tradeify news trading is allowed at trader's own risk.
+# Core V1 does not enforce activity, payout duration/profit ratios,
+# strategy ownership, cross-account hedging, or session closure.
+# Official review 2026-10-27:
+# https://help.tradeify.co/en/articles/12268167-essential-trading-rules-overview
+#
+# GENERAL REVIEW 2026-10-27: contract limits, scaling, DLL/MLL, news,
+# session times, consistency, min days, payouts and automation checked
+# against official Lucid, Alpha and Tradeify pages. Existing L|/LI|/LN|
+# unchanged because these additions cannot safely be encoded in V1.
+# EOD MLL is a HARD equity breach intraday even when the MLL threshold
+# itself recalculates only at EOD. Combined mini/micro exposure, dynamic
+# scaling, news SL/TP execution and personal Core risk settings need
+# separate safeguards. Do not use the library as sole prop compliance.
+# FTMO FUTURES operational rows and EARN2TRADE FUTURES documentation
+# preserved. No CFD profiles added.
+#
+# 2026-10-26 ALPHA FUTURES: MANUAL EXECUTION, AUTOMATION AND COPY TRADING
+# DOCUMENTATION ONLY. Applies to ALPHA_* Evaluation and Qualified profiles.
+# Copying trades between accounts owned and operated by the SAME individual
+# is generally permitted; the account holder must execute the leader trade.
+# Alpha expressly prohibits automated/group/reverse trading and hedging.
+# AI-driven bots and hands-off fully automated execution are prohibited.
+# Alpha permits certain SEMI-AUTOMATED indicators/signals only where the
+# trader MANUALLY places, monitors and manages the trade.
+# HFT / excessive frequency: Alpha does not want strategies taking 100+
+# trades per day, automated OR manual. This is not an invitation to treat
+# 99 trades as automatically compliant; evaluate the overall strategy.
+# Tick/micro-scalping scrutiny: <10 ticks AND <2 minutes, and recurring
+# very-short-duration profit patterns; no universal minimum hold time.
+# Copying is NOT permission for autonomous strategy execution or for
+# opposing long/short positions across accounts (including NQ vs MNQ).
+# SAISEI CORE: manual leader orders with same-owner copying are distinct
+# from autonomous trade entry. Automated placement/adjustment of SL/TP,
+# OCO, risk liquidations and order management are NOT specifically cleared
+# by the reviewed Alpha articles; request written approval for exact Core
+# behavior before enabling potentially non-manual order management.
+# Never disable protective stops merely to satisfy an automation rule.
+# V1 DOES NOT enforce ownership, strategy automation classification,
+# daily trade count, scalping-pattern review, or cross-account hedging.
+# No change to L|, LI| or LN| records in this update.
+# Sources (official):
 # https://help.alpha-futures.com/en/articles/9508585-prohibited-trading-practices
 # https://help.alpha-futures.com/en/articles/10573989-copy-trading
 #
-# 2026-10-21 ALPHA CONSISTENCY (COMMENTS ONLY; NOT ENFORCED BY CORE V1)
-# Evaluation: Zero none; Standard 50%; Advanced 40%.
-# Qualified: Zero 40%; Standard 40%; Advanced none; Direct 20%.
-# Qualified consistency affects payout eligibility, not automatic breach.
-# https://help.alpha-futures.com/en/articles/9492048-consistency-rule
-# 2026-10-21 ALPHA DIRECT 50K QUALIFIED PAYOUT AMBIGUITY:
-# Official maximum withdrawal pages differ ($1500 vs $2000); obtain written
-# clarification. Do not encode either payout cap as an enforced Core limit.
-# https://help.alpha-futures.com/en/articles/10491202-maximum-withdrawal-request
-# https://help.alpha-futures.com/en/articles/9492051-payout-policy
-# https://help.alpha-futures.com/en/articles/15838742-direct-account-overview
+# 2026-10-21 ALPHA FUTURES CONSISTENCY / PAYOUT REVIEW (COMMENTS ONLY):
+# Applies to ALPHA_* profiles below; no L|/LI|/LN| numeric values changed.
+# EVALUATION:
+#   ALPHA_ZERO_*_EVAL: no consistency requirement documented for Zero eval.
+#   ALPHA_STANDARD_*_EVAL: best single day <= 50% of total net eval profit.
+#   ALPHA_ADVANCED_*_EVAL: best single day <= 40% of total net eval profit.
+#   Evaluation cannot pass until applicable consistency requirement is met.
+# QUALIFIED / PAYOUT:
+#   ALPHA_ZERO_*_QUAL*: 40% consistency since previous withdrawal request.
+#   ALPHA_STANDARD_*_QUAL*: 40% consistency since previous withdrawal request.
+#   ALPHA_ADVANCED_*_QUAL*: NO consistency requirement.
+#   ALPHA_DIRECT_*_QUAL*: 20% consistency since previous withdrawal request.
+#   Official Qualified wording: a best day greater than or EQUAL TO the
+#   percentage prevents payout eligibility; monitor dashboard threshold.
+#   Exceeding consistency does NOT automatically breach the account;
+#   continue trading until payout eligibility is restored.
+#   Direct Qualified also requires withdrawal profit target; 50K Direct:
+#   first target $3000, subsequent targets $2000 after each withdrawal.
+#   V1 DOES NOT calculate consistency or payout eligibility.
+# Source: https://help.alpha-futures.com/en/articles/9492048-consistency-rule
+# Source: https://help.alpha-futures.com/en/articles/9492051-payout-policy
+# Source: https://help.alpha-futures.com/en/articles/15838742-direct-account-overview
+#
+# 2026-10-21 ALPHA DIRECT 50K QUALIFIED MAX PAYOUT AMBIGUITY:
+#   Official 'Maximum Withdrawal Request' page says $1500 per request.
+#   Official 'Payout Policy' AND 'Direct Account Overview' say $2000.
+#   UNRESOLVED: do not encode either amount as authoritative; request
+#   written clarification from Alpha before relying on a maximum.
+#   This is a payout limit ambiguity, NOT a daily profit/loss limit.
+#   Do NOT change ALPHA_DIRECT_50K_QUALIFIED L/LI/LN controls for it.
+# Source: https://help.alpha-futures.com/en/articles/10491202-maximum-withdrawal-request
+# Source: https://help.alpha-futures.com/en/articles/9492051-payout-policy
+# Source: https://help.alpha-futures.com/en/articles/15838742-direct-account-overview
 #
 # 2026-10-20 INTEGRATION: FTMO FUTURES + EARN2TRADE FUTURES ONLY.
 # FTMO FUTURES: Growth/Pro 50K,100K,150K EVAL and SimFunded manual tiers.
@@ -1545,4 +1797,3 @@ LI|FTMO_FUTURES_PRO_150K_SIMFUNDED_T5|MYM|150|ALLOW
 LI|FTMO_FUTURES_PRO_150K_SIMFUNDED_T5|M2K|150|ALLOW
 LI|FTMO_FUTURES_PRO_150K_SIMFUNDED_T5|MGC|150|ALLOW
 LI|FTMO_FUTURES_PRO_150K_SIMFUNDED_T5|MCL|150|ALLOW
-
