@@ -1,5 +1,461 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-10-28
+# LIBRARY_VERSION=2026-11-02
+# 2026-11-02 OFFICIAL RULE REVIEW - MATERIAL OMISSIONS (DOCUMENTATION ONLY)
+# Baseline: GitHub main, SAISEI_RuleLibrary_V1.txt, version 2026-10-28,
+# blob SHA c0ca9659d373898bed1f7a12e69f6a49e1b3385b.
+# Carries forward unpublished review drafts dated 2026-10-29..11-01.
+# These are pre-existing official requirements identified on REVIEW DATE
+# 2026-11-02, NOT rules newly introduced or effective on that date.
+# No executable L|, LI| or LN| row has been changed; no CFDs added.
+#
+# LUCID_LIVE_50K_T1/T2/T3 - PROVIDER-SPECIFIC SESSION CUTOFF:
+# PRIOR GitHub and 2026-11-01 draft: did not document the different
+# LucidLive exit deadlines for Tradovate and Rithmic providers.
+# OFFICIAL: no swing/overnight positions on new LucidLive accounts;
+# Tradovate Live positions may remain open until 4:45 PM Eastern;
+# Rithmic Live positions only until 4:15 PM Eastern (30 min earlier).
+# An optional automatic liquidation setting can be enabled at onboarding.
+# Do NOT apply the generic 4:45 PM cutoff to Rithmic Live, nor confuse
+# this rule with the separate LucidMaxx LIVE account program.
+# AMBIGUITY: Lucid labels its times 'EST'; verify provider dashboard,
+# holiday schedule and local DST conversion instead of hard-coding a
+# fixed Spain UTC offset. The article does not say whether the optional
+# auto-liquidation feature is enabled on every Live account.
+# Core V1 cannot infer the Live broker/provider from profile name or
+# guarantee pre-close flattening; set a manual earlier cutoff.
+# Official Lucid 'Allowed Trading Times', dated 2026-08-26,
+# reviewed 2026-11-02:
+# https://support.lucidtrading.com/en/articles/11404729-allowed-trading-times
+#
+# TRADEIFY_GROWTH_50K_FUNDED - PENDING PAYOUT / ELIGIBILITY RISK:
+# PRIOR GitHub and 2026-11-01 draft: no explicit protection of a pending
+# Growth payout request against subsequent losses before approval.
+# OFFICIAL: Growth 50K accounts purchased from 2025-09-12 08:00 ET
+# require a balance of at least $53,000 to REQUEST a payout;
+# accounts purchased BEFORE that cutoff require $52,100.
+# The qualifying minimum balance must be maintained until approval.
+# Trading after submitting the request is allowed, but falling below
+# the minimum threshold, or breaching the account, BEFORE processing
+# results in payout denial. A request cannot be edited or canceled.
+# The minimum balance is NOT the amount available to withdraw: separate
+# per-payout caps apply. Approved payouts deduct from the account.
+# Core V1 cannot track purchase vintage, pending approval, external
+# payout state or post-request eligibility; use a manual risk lock.
+# Official Tradeify 'Growth Funded: Account Payout Policy', reviewed
+# 2026-11-02 (page states 'Updated over 2 weeks ago'; exact effective
+# date of the post-request condition not separately disclosed):
+# https://help.tradeify.co/en/articles/11083796-growth-funded-account-payout-policy
+#
+# TRADEIFY ALL PLANS - PAYMENT / ACCOUNT CONTROL COMPLIANCE:
+# PRIOR GitHub and 2026-11-01 draft: omitted Tradeify's requirement
+# that the actual account owner personally pay and control the account.
+# OFFICIAL: each trader must own, control, verify and operate their
+# own account; no third-party trading, account access or credential
+# sharing. Each account purchase must be made by the same trader using
+# a payment method in that trader's own name, including when a relative
+# offers to pay. Verification and compliance review may occur at any
+# stage, including after payout. A review is not itself proof of breach.
+# Core V1 cannot verify payer identity, KYC, network access or account
+# ownership; this is a manual administrative compliance check.
+# Official Tradeify Risk & Compliance Guidelines FAQ, dated
+# 2026-10-01 (guidelines updated 2026-09-15), reviewed 2026-11-02:
+# https://help.tradeify.co/en/articles/17069653-risk-compliance-guidelines-faq
+#
+# ALPHA ALL EVAL/QUALIFIED - MBT/MET CONTRACT EQUIVALENCE:
+# PRIOR GitHub and 2026-11-01 draft: no warning that Alpha treats
+# MBT and MET crypto futures as FULL MINI contracts for sizing.
+# OFFICIAL: 1 MBT or 1 MET consumes 1 mini contract allocation,
+# despite their 'micro' symbols. Example: 5 MBT = 5 full contracts.
+# There are currently NO MBT/MET LI| permissions in this library;
+# do NOT add them or apply a generic 10-micro-to-1-mini rule to them.
+# Core V1 may not enforce this exceptional instrument conversion.
+# Official Alpha 'What and When you can Trade', dated 2026-07-17,
+# reviewed 2026-11-02:
+# https://help.alpha-futures.com/en/articles/9492096-what-and-when-you-can-trade
+#
+# LUCID_DAILY (NO PROFILE PRESENT) - HIGH-IMPACT NEWS HARD BREACH:
+# PRIOR GitHub and 2026-11-01 draft: LucidDaily red-folder restriction
+# was not explicit. OFFICIAL: trading red-folder news on LucidDaily is
+# a HARD BREACH; Flex, Pro and Direct allow news entries/exits.
+# No LucidDaily profile exists in this V1 library; this is a warning
+# for future profile additions, NOT a change to LucidFlex news policy.
+# Core V1 must never treat a Flex news exemption as global Lucid policy.
+# Official Lucid 'Other Trading Activities', dated 2026-08-26,
+# reviewed 2026-11-02:
+# https://support.lucidtrading.com/en/articles/11404728-other-trading-activities
+#
+# TRADEIFY ALL PLANS - HOLIDAY HALF-DAY / RITHMIC PAYOUT CREDIT:
+# PRIOR GitHub and 2026-11-01 draft: 12:59 PM ET holiday closing
+# deadline was noted but Rithmic payout-day credit delay was omitted.
+# OFFICIAL: on shortened holiday sessions close positions by 12:59
+# PM ET. On Rithmic the shortened trading day is credited at the next
+# full market close; payout eligibility may appear only after that
+# later reconciliation, even though the holiday session counts.
+# Core V1 cannot infer holiday schedules or Rithmic credit posting.
+# Official Tradeify 'Rules: Permitted Times to Trade', reviewed
+# 2026-11-02 (page says 'Updated over 2 weeks ago'):
+# https://help.tradeify.co/en/articles/10495876-rules-permitted-times-to-trade
+#
+# 2026-11-02 SCOPE/VALIDATION: Lucid Flex/Live/Maxx news, hours,
+# scaling, contracts, drawdown, daily loss, payout and automation;
+# Alpha Zero/Standard/Advanced/Direct loss, news, consistency, scaling,
+# minimum days, payout and copy-trading; Tradeify Growth/Lightning/
+# Select/Elite news, trading hours, scaling, payout, hedging and risk
+# compliance rechecked against official help pages. No new verified
+# executable limits are introduced. Core V1 cannot enforce external
+# payout approval, household restrictions, platform-specific close,
+# broker-dependent session credit or discretionary compliance review.
+# Validation: 83 L|, 996 LI|, 83 LN|, total 1,162 operational rows;
+# all rows identical and in the same order as GitHub 2026-10-28.
+# FTMO Futures and Earn2Trade Futures documentation preserved.
+# GitHub NOT MODIFIED. Downloadable review draft only.
+#
+# 2026-11-01 OFFICIAL RULE REVIEW - MATERIAL ACCOUNT / ACTIVITY OMISSIONS
+# Baseline: GitHub main SAISEI_RuleLibrary_V1.txt, blob SHA
+# c0ca9659d373898bed1f7a12e69f6a49e1b3385b, version 2026-10-28.
+# Includes unpublished documentation drafts through 2026-10-31.
+# These are PRE-EXISTING official rules missing from the baseline/drafts;
+# 2026-11-01 is the REVIEW DATE, not the rule effective date.
+# Only documentation is added; no executable L|, LI| or LN| changes.
+#
+# LUCID ALL EVAL/FUNDED/LIVE - HOUSEHOLD ACCOUNT ALLOCATION:
+# PRIOR GitHub and 2026-10-31 draft: no Lucid-wide numerical account
+# allocation / household cap was documented. Existing per-profile sizing
+# is NOT a license to run unlimited accounts.
+# OFFICIAL: max 10 ACTIVE evaluations per household/family, and max 10
+# total accounts COMBINED across evaluations and funded. Funded accounts
+# are capped at 5 ACTIVE per household/family across ALL funded types
+# (e.g., Direct+Pro+Flex count together, not five of each).
+# With 5 funded accounts, up to 5 evaluations may be kept in reserve,
+# and Lucid explicitly allows trading those reserved evaluations.
+# LucidLive accounts: max 5 active per household/family.
+# AMBIGUITY: the help page does not specify whether/how Live accounts
+# count toward the 10 combined eval+funded cap. Confirm in writing if
+# holding Live alongside evaluation/funded accounts; do not infer extra
+# capacity from this note.
+# Core V1 cannot enforce household identity, total accounts across plans,
+# reserve status, or Live-account eligibility; check Lucid dashboard.
+# Official Lucid article dated 2026-08-26, reviewed 2026-11-01:
+# https://support.lucidtrading.com/en/articles/11404617-maximum-number-of-accounts
+#
+# ALPHA ALL QUALIFIED - MAXIMUM ALLOCATION / HOUSEHOLD:
+# PRIOR GitHub and 2026-10-31 draft: account allocation and household
+# restrictions were absent. These are administrative risk limits, NOT
+# per-instrument contract limits or scaling thresholds.
+# OFFICIAL maximum Qualified accounts BY TYPE: ZERO 5; DIRECT 5;
+# STANDARD 5 (Standard accounts dated BEFORE 2026-07-27 limited to 3);
+# ADVANCED 3. A trader with ANY active Advanced Qualified account is
+# restricted to 3 Qualified accounts. Only ONE username per individual,
+# and only ONE individual per household may use Alpha Futures services.
+# AMBIGUITY: 'by type' wording does not expressly authorize stacking
+# separate category maxima into a larger combined total. Do NOT infer
+# 5 Zero + 5 Direct + 5 Standard is allowed without written approval.
+# Core V1 cannot enforce identity, household, account vintage, combined
+# allocation, or the Advanced-qualified cross-type restriction.
+# Official Alpha article dated 2026-07-27, reviewed 2026-11-01:
+# https://help.alpha-futures.com/en/articles/9492088-maximum-allocation
+#
+# ALPHA EVALUATION AND QUALIFIED - INACTIVITY RULE:
+# PRIOR GitHub and 2026-10-31 draft: Alpha's activity requirement absent.
+# OFFICIAL: at least ONE trade in every 10 TRADING DAYS is required to
+# keep an Evaluation or Qualified account active; platform trading data
+# may be archived after 10 inactive trading days. Trade size does not
+# matter. This is NOT a 10-calendar-day rule and is NOT the separate
+# Lucid 30-calendar-day inactivity policy or Tradeify Elite 30-day rule.
+# The article does NOT specify automatic account termination/forfeiture
+# or whether the window is rolling; do not invent a closure penalty.
+# Core V1 cannot monitor platform archival or each account's last trade.
+# Official Alpha article dated 2025-11-05, reviewed 2026-11-01:
+# https://help.alpha-futures.com/en/articles/12757982-inactivity-rule
+#
+# ALPHA EVAL TO QUALIFIED - CONTRACT SIGNING DEADLINE:
+# PRIOR GitHub and 2026-10-31 draft: post-evaluation activation deadline
+# was absent. OFFICIAL: after passing evaluation, complete KYC and sign
+# the Qualified Account contract WITHIN 30 DAYS; otherwise the contract
+# expires. The passed evaluation is closed on reaching profit target.
+# ADVANCED activation fee: official pages list a one-time $149 fee for
+# eligible older purchases; accounts purchased AFTER 2026-07-08 no longer
+# require an activation fee. A separate fee article also says any due
+# fee must be paid within 30 days after passing. Confirm exact vintage,
+# cutoff-time and dashboard eligibility with Alpha before paying.
+# This is an administrative onboarding deadline, not a trading-day
+# minimum or payout rule. Core V1 cannot enforce KYC, signing deadlines,
+# purchase-date fee grandfathering, or qualified-account activation.
+# Official Alpha articles dated 2026-07-15 / 2026-07-24, reviewed 2026-11-01:
+# https://help.alpha-futures.com/en/articles/9820801-activating-your-qualified-account
+# https://help.alpha-futures.com/en/articles/9492083-activation-fee
+#
+# 2026-11-01 GENERAL REVIEW: Lucid Flex scaling, EOD MLL, DLL options,
+# news, microscalping, payout days/caps and account limits; Alpha Zero,
+# Standard, Advanced and Direct contracts/scaling, MLL, DLL, consistency,
+# news, hours, payouts, automation and account restrictions; Tradeify
+# Select, Growth, Lightning, Elite Live payout/scaling, drawdown, news,
+# hedging, hours, activity and automation rechecked. No newly verified
+# executable changes; no CFDs added. The 2026-10-29..31 Tradeify notes
+# remain unpublished documentation pending express user authorization.
+# Core V1 cannot guarantee full prop-firm compliance: dynamic EOD MLL,
+# account-wide mini/micro exposure, multi-account allocations, automated
+# strategy policy, news order execution, payouts and discretionary Live
+# reviews must be monitored independently.
+# VALIDATION: 83 L|, 996 LI|, 83 LN| (1,162 operational rows), unchanged.
+# GitHub NOT MODIFIED. Review draft only.
+#
+# 2026-10-31 OFFICIAL REVIEW - TRADEIFY ELITE LIVE MATERIAL OMISSIONS
+# Baseline: GitHub main blob c0ca9659d373898bed1f7a12e69f6a49e1b3385b
+# (LIBRARY_VERSION=2026-10-28). This draft also retains UNPUBLISHED
+# 2026-10-29 and 2026-10-30 documented omissions. These are pre-existing
+# official rules omitted from the library; no claim of 2026-10-31 enactment.
+# Official Elite Program page marked 'Updated over 2 weeks ago'; exact
+# effective dates for the rules below are not disclosed on that page.
+#
+# TRADEIFY_ELITE_LIVE_ALL - 30-DAY INACTIVITY / ACCOUNT CLOSURE:
+# PRIOR GitHub and 2026-10-30 draft: did not document an Elite Live-specific
+# inactivity closure condition; Sim Evaluation/Funded had a separate
+# minimum one executed trade per week policy. Do not conflate these.
+# OFFICIAL: each Elite Live account requires at least ONE FILLED trade in
+# EVERY rolling 30-day period. If no trade executes within 30 days, the
+# Elite Live account is CLOSED. Logging in or submitting an unfilled order
+# does NOT qualify. No exception is stated for non-trading weekends.
+# Core V1 cannot track Live per-account 30-day activity, account closures,
+# or broker-side fill timestamps; add external activity monitoring.
+# Official Tradeify Elite Program, reviewed 2026-10-31:
+# https://help.tradeify.co/en/articles/12969284-tradeify-elite-program
+#
+# TRADEIFY_ELITE_LIVE_ALL / LEGACY_LIVE - SIM/LIVE HOUSEHOLD EXCLUSIVITY:
+# PRIOR GitHub and 2026-10-30 draft: documented transition closing Sim
+# accounts, but not the continuing household-wide Sim/Live exclusion.
+# OFFICIAL: while ANY Tradeify Live account is ACTIVE (Legacy or Elite),
+# the trader cannot buy/activate new evaluations or open Sim Funded
+# accounts; NO MEMBER OF THE SAME HOUSEHOLD may hold Sim accounts while
+# that Live account is active. Sim and Live cannot run simultaneously.
+# After Live fails/closes, re-entry is subject to the cool-off period;
+# prior Sim payouts do NOT count toward a new Elite qualification cycle.
+# Core V1 cannot monitor household identity, subscription eligibility,
+# or cross-account/cross-person Sim/Live restrictions.
+# Official Tradeify Elite Program, reviewed 2026-10-31:
+# https://help.tradeify.co/en/articles/12969284-tradeify-elite-program
+#
+# TRADEIFY ELITE-ONLY MODE / COOLDOWN - ADMINISTRATIVE RISK RESTRICTIONS:
+# PRIOR GitHub and 2026-10-30 draft: did not explicitly cover the
+# discretionary Elite-Only purchase lock or post-breach cooldown period.
+# OFFICIAL: Tradeify may put selected traders in Elite-Only Mode, allowing
+# ONLY selected Select-plan purchases at full price; passing a Select eval
+# while in this mode may issue a Live account directly, skipping Sim Funded.
+# Live failure may trigger a cool-off period UP TO FOUR WEEKS, depending
+# on performance; confirm specific trader eligibility before repurchasing.
+# These are risk-team discretionary, not automatic thresholds or payouts.
+# Core V1 cannot enforce risk-team account modes or cooldown eligibility.
+# Official Tradeify Elite Program, reviewed 2026-10-31:
+# https://help.tradeify.co/en/articles/12969284-tradeify-elite-program
+#
+# 2026-10-31 GENERAL RECHECK (OFFICIAL):
+# Lucid: Flex optional DLL/40%-50% eval consistency, payout/MLL, scaling,
+# microscalping, Live rules and news restrictions reviewed.
+# Alpha Futures: scaling, EOD MLL, DLL, payout, consistency, session close,
+# copy trading and bot restrictions reviewed. No verified executable delta.
+# Tradeify: Select/Growth/Lightning contracts, scaling, DLL/EOD MLL,
+# news, hours, payout, consistency, funded microscalping and Elite Live
+# restrictions reviewed. No verified executable L|/LI|/LN| change.
+# No CFD accounts. FTMO Futures profiles and Earn2Trade Futures notes kept.
+# Validation: 83 L|, 996 LI|, 83 LN| (1,162 operational records) unchanged.
+# GitHub NOT MODIFIED. This file is a downloadable REVIEW DRAFT only.
+#
+# 2026-10-30 OFFICIAL RULE REVIEW - MATERIAL ELITE LIVE OMISSIONS
+# Baseline: GitHub main SAISEI_RuleLibrary_V1.txt at blob
+# c0ca9659d373898bed1f7a12e69f6a49e1b3385b (version 2026-10-28).
+# Includes the UNPUBLISHED 2026-10-29 documentation draft, whose 1,162
+# operational records were compared byte-for-byte with GitHub on 2026-10-30.
+# No operational L| / LI| / LN| modifications, and NO new CFD profiles.
+# These are official-source omissions in the library, NOT proof the rules
+# were introduced or took effect on 2026-10-30. The help pages currently
+# say 'Updated over a week ago' and do not state a precise effective date.
+#
+# TRADEIFY ELITE LIVE - TRANSITION TRIGGER AND SIM ACCOUNT TERMINATION:
+# PRIOR library: covered Sim Funded payout rules, but did NOT document the
+# CURRENT Elite Live transition threshold, full closure, or lost Sim profits.
+# CURRENT OFFICIAL: trader becomes ELIGIBLE FOR CONSIDERATION after either
+# (a) 3 payouts from ONE account, or (b) 10 total payouts across plan types
+# since the last Live transition (or first purchase if none). This is NOT an
+# automatic transfer: Tradeify retains discretionary risk-team selection.
+# On actual Live transition ALL Sim Funded and evaluation accounts close.
+# Only funded accounts with >=1 successful payout are eligible to move Live.
+# All new Elite Live accounts start at $0; simulated profits or progress
+# since the last successful payout DO NOT transfer. Prior paid payouts stay.
+# HISTORICAL DOCUMENT CONFLICT: the older 2026-03-31 announcement describes
+# a 5-payout qualification; current detailed Elite Program page says 3/10.
+# Apply the current detailed page, but confirm any account-specific/legacy
+# treatment in writing before planning around a Live transfer.
+# Core V1 cannot count cross-plan payouts, model discretionary transitions,
+# close Sim accounts, or preserve unwithdrawn Sim profits at transition.
+# Official Tradeify Elite Program reviewed 2026-10-30:
+# https://help.tradeify.co/en/articles/12969284-tradeify-elite-program
+# Historical announcement published 2026-03-31:
+# https://help.tradeify.co/en/articles/12987441-introducing-the-new-select-plan-changes-to-the-live-program
+#
+# TRADEIFY ELITE LIVE - DRAWDOWN / PAYOUT TIMING AND RISK TRAP:
+# PRIOR library: Sim Funded 90/10 payouts documented; no Elite Live risk
+# profile or payout-before-EOD-lock consequences documented.
+# CURRENT OFFICIAL: Elite Live has 80/20 payout split (not Sim Funded 90/10),
+# no DLL, and EOD trailing drawdown still enforced INTRADAY on net liquidation.
+# A 50K Elite Live account starts with $0, $2000 EOD drawdown, 2 minis/20
+# micros until scaling threshold and 4 minis/40 micros above that threshold.
+# Drawdown locks when EOD balance reaches $2100 on 50K Elite Live.
+# If a payout is requested BEFORE drawdown lock, processing may wait until
+# next business day AFTER EOD drawdown rises; withdrawing then REDUCES
+# remaining risk room. Example from Tradeify: $500 day-one gain followed
+# by $500 payout leaves only $1500 of the original $2000 risk room.
+# A withdrawal that reduces Live balance to $0 CLOSES the Live account.
+# Elite Live profile parameters vary by size; do NOT use Sim Funded LI or
+# L risk settings as a substitute for Live without a verified new profile.
+# Core V1 cannot enforce EOD trailing MLL, Live payout timing, drawdown lock,
+# Live account closure on withdrawal, or cross-account Live eligibility.
+# Official Tradeify Elite Program reviewed 2026-10-30:
+# https://help.tradeify.co/en/articles/12969284-tradeify-elite-program
+#
+# TRADEIFY ELITE LIVE - ACCELERATOR REWARD POOL / SELECT RISK INCENTIVE:
+# PRIOR library: no Elite reward pool eligibility, payout split or drawdown
+# usage constraint. This is reference-only and NOT executable risk logic.
+# CURRENT OFFICIAL: per-Live-account base pool 25K $2000; 50K $4000;
+# 100K $8000; 150K $12000; 300K $15000. Maximum monthly reward per
+# account: $1000 / $2000 / $3000 / $4500 / $6000 respectively.
+# To unlock a monthly reward: >=5 days each with >=$250 profit AND
+# month-end profit GREATER THAN that Live account's maximum drawdown
+# (see official monthly reward thresholds below). The pool article uses
+# 25K $1000, 50K $2000, 100K $3000, 150K $4500, 300K $6000.
+# AMBIGUITY: the Elite Program lists a 25K EOD drawdown of $1500 whereas
+# the reward-pool article uses $1000 for 25K monthly reward eligibility;
+# do not silently equate these numbers. Confirm with Tradeify for 25K.
+# Select-only 1.5x pool multiplier requires BOTH a Sim Funded consistency
+# score STRICTLY BELOW 40% and never using >75% of allowed max drawdown.
+# On 50K this can raise total pool $4000 -> $6000, not monthly $2000 cap.
+# Both profits and rewards pay 80% trader / 20% Tradeify. Unpaid pool is
+# forfeited if the corresponding Live account breaches. This is an earning
+# incentive, NOT extra available drawdown or guaranteed funding capital.
+# Core V1 cannot track the Sim consistency score, historical maximum
+# drawdown usage, monthly profitable-day targets or reward-pool eligibility.
+# Official Tradeify Elite Accelerator Reward Pools reviewed 2026-10-30:
+# https://help.tradeify.co/en/articles/14068315-tradeify-elite-accelerator-reward-pools
+# Elite Program account size / drawdown cross-check:
+# https://help.tradeify.co/en/articles/12969284-tradeify-elite-program
+#
+# 2026-10-30 GENERAL RECHECK (OFFICIAL):
+# Lucid Flex: scaling, news, DLL/MLL, winning days and payout caps rechecked.
+# Alpha Futures: copy/automation, news, MLL, scaling, payout and closing time
+# rechecked. No additional verified operational change for existing profiles.
+# Tradeify: 300K V1/V2 DLL/MLL and limits, Select consistency, Growth and
+# Lightning payouts, session hours and correlated hedging rechecked.
+# 300K V2 already has separate executable profiles; no V1-to-V2 copying.
+# 2026-10-29 review additions retained as unpublished documentation notes.
+# FTMO FUTURES and EARN2TRADE FUTURES documentation retained; no CFDs.
+# Validation: 83 L|, 996 LI|, 83 LN|, 1,162 operational records unchanged.
+# GitHub NOT MODIFIED. This is a downloadable review draft only.
+#
+# 2026-10-29 OFFICIAL RULE REVIEW - MATERIAL DOCUMENTATION GAPS ONLY
+# Baseline: GitHub main SAISEI_RuleLibrary_V1.txt, blob
+# c0ca9659d373898bed1f7a12e69f6a49e1b3385b (2026-10-28).
+# The issues below were ALREADY present in official help articles; this is
+# their first explicit documentation in this library, NOT proof that the
+# firms introduced these restrictions on 2026-10-29.
+# NO changes to executable L| / LI| / LN| rows, contract limits or DLLs.
+#
+# TRADEIFY - ALGORITHMS USED WITH SAISEI CORE ACROSS MULTIPLE FIRMS:
+# PRIOR: described sole-owned non-shared non-HFT algos as allowed, but did
+# NOT record Tradeify's ban on using a BOT/ALGORITHM across multiple firms.
+# OFFICIAL: a permitted bot/strategy must be exclusively owned and used
+# within Tradeify; using the same bot across other firms is against policy.
+# Tradeify may request ownership proof and a live video of the code running.
+# This restriction concerns bots/algorithms; whether a particular SAISEI
+# Core risk-manager feature or same-owner manual order copier is classified
+# as a 'bot' under this rule is NOT settled by the article. Obtain written
+# Tradeify clarification before using identical automated strategy code
+# across Tradeify, Lucid and Alpha. Do NOT infer all risk controls are banned.
+# Core V1 cannot verify bot ownership, code sharing or firm-specific usage.
+# Official Guidelines for Traders, reviewed 2026-10-29 (page marked
+# 'Updated over a week ago'; no exact effective date disclosed):
+# https://help.tradeify.co/en/articles/10468318-guidelines-for-traders
+#
+# TRADEIFY - CORRELATED HEDGING, MINI/MICRO COMBINATION AND ENFORCEMENT:
+# PRIOR: generic cross-account hedging ban documented, but no Product Group
+# coverage, explicit allowed mini+micro same-direction or detector details.
+# OFFICIAL: opposing simultaneous positions are prohibited within the SAME
+# Product Group across any Tradeify accounts, even across DIFFERENT symbols.
+# Equity Index includes ES/MES, NQ/MNQ, YM/MYM, RTY/M2K (also EMD/NKD and
+# listed Eurex indices); Energy includes CL/MCL/QM/NG/QG; Metals includes
+# GC/MGC/QO/SI/HG/PL/PA. Full list in official article.
+# Example: long ES on account A + short NQ on account B is prohibited.
+# Same-direction mini+micro positions ARE permitted, but total exposure must
+# remain within combined 10-micro-to-1-mini account limit.
+# Official automatic hedging-breach detection lists THREE simultaneous
+# criteria: opposing positions, duration >10 seconds, and hedge profit >$150.
+# THIS IS NOT A SAFE HEDGING EXEMPTION: deliberate hedging of any duration
+# remains prohibited and cross-account/correlated reviews may be separate.
+# Core V1 cannot enforce cross-symbol Product Groups, cross-account
+# direction, combined exposure, or detection/review conditions.
+# Official Hedging & Correlated Products, dated 2026-08-19; reviewed 2026-10-29:
+# https://help.tradeify.co/en/articles/10495868-rules-hedging-correlated-products
+#
+# TRADEIFY_SELECT_50K_EVAL - CONSISTENCY ADD-ON / TARGET VINTAGE:
+# PRIOR: library documented standard 40% consistency but not selectable
+# 50% evaluation add-on, resulting 2-vs-3-day mathematical minimum, or
+# profit-target grandfathering for older 50K evaluations.
+# OFFICIAL: 50K Select evaluation profit target is $3000 on new dashboard;
+# older purchases before dashboard launch retain $2500 target on resets.
+# 40% standard consistency mathematically requires >=3 profitable days;
+# purchased 50% consistency add-on can permit passing in >=2 days, subject
+# to all other conditions. No DLL; $2000 EOD MLL; 4 minis/40 micros in eval.
+# Exact launch date of 'new dashboard' not given on this help page; confirm
+# account purchase terms and add-on in the dashboard, do NOT guess vintage.
+# Core V1 has no evaluation target/consistency/add-on/day counter or
+# purchase-vintage detection; L| dailyProfit=0 is NOT a profit target.
+# Official Select Evaluation Accounts, reviewed 2026-10-29 (help page
+# marked 'Updated over a week ago'; no exact effective date shown):
+# https://help.tradeify.co/en/articles/12853921-select-evaluation-accounts
+#
+# TRADEIFY_SELECT_300K_V2_* - FUNDED ACCOUNT COUNT EXCEPTION:
+# PRIOR: general 5 simultaneous Tradeify Sim Funded accounts stated without
+# the explicit Select 300K V2 carve-out; V1/V2 were already separate profiles.
+# OFFICIAL: up to THREE V2 300K Sim Funded accounts can be held ON TOP of
+# five standard Sim Funded accounts, for up to EIGHT total. Legacy V1 300K
+# accounts COUNT within the standard five. 300K purchases: max three
+# lifetime per user (V1+V2 combined), KYC before purchase, NO resets, and
+# excluded from ordinary 15 evaluations / rolling 30 days purchase limit.
+# Other Select evaluations: max 15 purchases in 30 days, each reset at
+# most 10 times in 30 days. These are account/purchase rules, NOT a
+# permission to exceed any account's per-instrument or combined sizing.
+# Core V1 cannot count purchases, reset eligibility, or total active accounts.
+# Official 300K Select Account and Select Evaluation Accounts, reviewed
+# 2026-10-29 (300K page marked 'Updated over 2 weeks ago'):
+# https://help.tradeify.co/en/articles/16497699-300k-select-account
+# https://help.tradeify.co/en/articles/12853921-select-evaluation-accounts
+#
+# LUCID / ALPHA / TRADEIFY GENERAL RECHECK 2026-10-29:
+# Checked contract/scaling, DLL/MLL, news, trading hours, consistency,
+# minimum days, payouts and automation against official rules. No newly
+# verified operational L|/LI|/LN| changes for existing profiles.
+# Lucid Flex scaling: https://support.lucidtrading.com/en/articles/12945808-lucidflex-scaling-plan
+# Lucid Flex payouts: https://support.lucidtrading.com/en/articles/12945796-lucidflex-payouts
+# Alpha MLL: https://help.alpha-futures.com/en/articles/9491999-maximum-loss-limit-mll
+# Alpha scaling: https://help.alpha-futures.com/en/articles/9492025-scaling-plan
+# Alpha news: https://help.alpha-futures.com/en/articles/9492063-news-trading-policy
+# Alpha payout: https://help.alpha-futures.com/en/articles/9492051-payout-policy
+# Tradeify overview: https://help.tradeify.co/en/articles/12268167-essential-trading-rules-overview
+# Tradeify Select payout: https://help.tradeify.co/en/articles/12853966-select-flex-and-select-daily-payout-policies
+# Tradeify Growth payout: https://help.tradeify.co/en/articles/11083796-growth-funded-account-payout-policy
+# Tradeify Lightning payout: https://help.tradeify.co/en/articles/10495932-lightning-funded-account-payout-policy
+#
+# VALIDATION 2026-10-29: 83 L|, 996 LI|, 83 LN|; all 1,162 executable
+# records match GitHub 2026-10-28 byte-for-byte. FTMO FUTURES and
+# EARN2TRADE FUTURES preserved. No CFD profiles or executable changes.
+# Core V1 cannot guarantee overall prop compliance: EOD trailing MLL,
+# account-wide combined exposure, cross-account correlated hedging,
+# bot policy, news-order fills, session close, consistency, payouts and
+# account-vintage conditions require independent monitoring/approval.
+# This 2026-10-29 version is a downloadable REVIEW DRAFT only; DO NOT
+# publish to GitHub without fresh express user authorization.
+# Historical note: the 2026-10-28 review draft was later published to
+# GitHub at the user's explicit request. Older status comments below
+# describe the drafts at their original creation time.
+#
 # 2026-10-28 OFFICIAL RULE REVIEW - NEW MATERIAL OMISSIONS (COMMENTS ONLY)
 # Review baseline: GitHub main blob SHA d078481292b7264d49bf35f36ed376def552c824
 # (LIBRARY_VERSION=2026-10-26) + documented 2026-10-27 draft.
