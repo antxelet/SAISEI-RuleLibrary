@@ -1,5 +1,105 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-11-02
+# LIBRARY_VERSION=2026-11-03
+# 2026-11-03 OFFICIAL RULE REVIEW - MATERIAL DOCUMENTATION OMISSIONS
+# GitHub main baseline read and verified: version 2026-11-02,
+# blob SHA 36f925e547daab8df0dd42103f8c918966958674.
+# REVIEW DATE 2026-11-03 is NOT an asserted rule publication/effective date.
+# Official pages may show relative update timestamps without precise effective
+# dates. These are existing official requirements not explicitly captured in
+# the 2026-11-02 library; do not assume newly enacted rules.
+# NO GitHub upload/update is authorized by this scheduled review.
+# No L|, LI| or LN| executable records changed; no CFDs added.
+#
+# LUCID LIVE - HOUSEHOLD SIM/LIVE EXCLUSIVITY:
+# PRIOR 2026-11-02: documented household-wide maximum account counts and
+# sim-account closure on transition, but not the ongoing household Sim ban.
+# OFFICIAL: when ONE household member trades a Lucid LIVE account, other
+# household members CANNOT trade Lucid simulated accounts. On live transition,
+# ALL remaining simulated accounts are closed (or upon choosing cash-out);
+# ineligible funded accounts' evaluation fee refund requires >=50% of the
+# original drawdown to remain. This is not an extra permitted Sim allocation
+# under the general 10-account/5-funded household limits.
+# SAISEI CORE V1 cannot verify household identities, distinguish another
+# family member's accounts, or enforce automatic Sim-account closure.
+# SOURCE (official Lucid New Live Structure, reviewed 2026-11-03):
+# https://support.lucidtrading.com/en/articles/16558826-new-live-structure
+#
+# LUCID LIVE / CROSS-ACCOUNT COPY - HEDGING SEVERITY:
+# PRIOR 2026-11-02: general risk/hedging reviews, but no explicit LucidLive
+# copytrader-related permanent-ban warning in the library.
+# OFFICIAL: hedging among Lucid LIVE accounts is prohibited, including
+# accidental opposing exposure caused by copytrader issues. The LucidLive
+# FAQ states that violations lead to a PERMANENT BAN. Lucid's general
+# hedging article also forbids opposite positions across own accounts,
+# other users and firms, and correlated products across accounts (e.g.
+# ES long versus NQ short). General article describes warning/reset and
+# escalating enforcement; the Live FAQ is more severe. Apply the stricter
+# Live-specific warning and seek written clarification for borderline cases.
+# SAISEI CORE V1 cannot detect net correlated exposures across parent/slave
+# accounts or other platforms; replication errors can create prohibited
+# hedges. Manual account/order audit remains mandatory.
+# SOURCES (official Lucid, reviewed 2026-11-03):
+# https://support.lucidtrading.com/en/articles/16558826-new-live-structure
+# https://support.lucidtrading.com/en/articles/11404734-prohibited-hedging
+#
+# TRADEIFY_SELECT_300K_V1_FLEX_T1..T5 / V2_FLEX_T1..T5 - EARLY PAYOUT LOCK:
+# PRIOR 2026-11-02: separate V1/V2 DLL/contract tiers and general 50K Select
+# payout-related MLL locking documented, but NOT 300K-specific early lock.
+# OFFICIAL: for a Select 300K FLEX account (V1 or V2), if a payout is
+# approved BEFORE its usual EOD drawdown-lock threshold, the drawdown
+# automatically locks at a FIXED $300,100. Normal EOD lock triggers are
+# $306,100 for V1 Flex and $308,100 for V2 Flex; payout approval can cause
+# earlier locking. This can sharply reduce remaining risk room after payout.
+# This is a drawdown/payout interaction, NOT a change to fixed DLL:
+# V1 Flex has no DLL; V2 Flex has a $4,000 DLL.
+# SAISEI CORE V1 cannot monitor payout approval, EOD MLL floor, or lock state.
+# SOURCE (official Tradeify 300K Select Account, reviewed 2026-11-03):
+# https://help.tradeify.co/en/articles/16497699-300k-select-account-limited-release
+#
+# TRADEIFY_SELECT_300K_V1_DAILY_T1..T5 / V2_DAILY_T1..T5 - NEW PROFIT:
+# PRIOR 2026-11-02: executable DLLs and tiers preserved, but the 300K
+# DAILY payout-specific 50% new-profit rule was not documented explicitly.
+# OFFICIAL: 50% OF EACH 300K DAILY PAYOUT must come from NEW PROFIT earned
+# since the prior payout; the ordinary Select Daily 2x-cycle-profit rule for
+# 25K-150K does not apply to 300K in the same way. V1 Daily buffer $5,100
+# (balance >=$305,100), cap $3,500 per day; V2 buffer $6,100 (balance
+# >=$306,100), cap $4,000 per day. Both require positive cycle profit on
+# subsequent payouts and the withdrawal must not breach the buffer.
+# SAISEI CORE V1 cannot track cycle profit, payout amount, buffers, approval
+# or eligibility. Do not infer payout permission from dailyLoss alone.
+# SOURCES (official Tradeify, reviewed 2026-11-03):
+# https://help.tradeify.co/en/articles/16497699-300k-select-account-limited-release
+# https://help.tradeify.co/en/articles/12853966-select-flex-and-select-daily-payout-policies
+#
+# TRADEIFY SELECT FLEX / DAILY - PENDING PAYOUT EXCLUSIVITY:
+# PRIOR 2026-11-02: positive payout-cycle requirements and date-dependent
+# caps documented for 50K, but no explicit single-open-request constraint.
+# OFFICIAL: only ONE payout request may be pending on a Select account at
+# a time. A new request is blocked until the previous request is approved
+# and paid or denied, for BOTH Select Flex and Select Daily (including
+# 300K policy variants unless Tradeify confirms an account-specific rule).
+# Core V1 cannot inspect external payout status or enforce this rule.
+# SOURCE (official Tradeify Select payout policy, reviewed 2026-11-03):
+# https://help.tradeify.co/en/articles/12853966-select-flex-and-select-daily-payout-policies
+#
+# GENERAL REVIEW 2026-11-03: checked official Lucid Flex/Live/Maxx,
+# Alpha Zero/Standard/Advanced/Direct and Tradeify Select/Growth/Lightning/
+# Elite sources for contracts, scaling, DLL/MLL, EOD vs intraday breaches,
+# news, session close, consistency, minimum days, payouts, automation and
+# household/hedging restrictions. No independently verified numerical
+# L|/LI|/LN| change was justified. The Alpha Direct 50K maximum payout
+# conflict ($1,500 vs $2,000 across official articles) remains unresolved;
+# existing documentation retained, no guessed operational override.
+# Core V1 limitations remain: no dynamic EOD MLL, account-vintage auto
+# selection, total combined exposure, correlated hedging, household checks,
+# payout cycles, payout approvals, or discretionary Live transitions.
+# FTMO FUTURES executable profiles and EARN2TRADE FUTURES reference notes
+# preserved. No CFD profiles. Historical comments referring to GitHub NOT
+# MODIFIED describe their respective earlier unpublished review drafts;
+# version 2026-11-02 was subsequently published to GitHub on 2026-11-02.
+# Validation against GitHub main 2026-11-02: 83 L|, 996 LI|, 83 LN|,
+# total 1,162 operational rows identical in exact order. Comments only.
+#
 # 2026-11-02 OFFICIAL RULE REVIEW - MATERIAL OMISSIONS (DOCUMENTATION ONLY)
 # Baseline: GitHub main, SAISEI_RuleLibrary_V1.txt, version 2026-10-28,
 # blob SHA c0ca9659d373898bed1f7a12e69f6a49e1b3385b.
