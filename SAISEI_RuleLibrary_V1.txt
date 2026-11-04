@@ -1,5 +1,41 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-11-03
+# LIBRARY_VERSION=2026-11-04
+# 2026-11-04 OFFICIAL RULE REVIEW - MATERIAL PAYOUT OMISSION (DOCUMENTATION ONLY)
+# BASELINE: GitHub main version 2026-11-03, blob SHA
+# c72e1633b4d3016e5a173cd05a50ce3541e3f89a; reviewed 2026-11-04.
+# TRADEIFY_SELECT_FLEX_50K_T1/T2/T3, 100K, 150K (WHERE PROFILE EXISTS):
+# PRIOR LIBRARY: 50% Consistency add-on documented for SELECT evaluation
+# (allows different evaluation consistency), and standard funded Flex payout
+# caps by purchase vintage documented; no separate LOWER Flex payout caps
+# for traders purchasing the 50% consistency add-on were documented.
+# OFFICIAL RULE: for SELECT accounts WITH 50% Consistency add-on, Flex payout
+# per-request ceiling is 50% of total account profit, capped at $2,000
+# (50K), $3,000 (100K), or $4,000 (150K). This overrides the higher
+# standard Flex dollar cap for the applicable account. SELECT DAILY payout
+# caps are UNCHANGED by the add-on. The official page does not state an
+# add-on-specific 25K or 300K cap: do not extrapolate one.
+# PURCHASE VINTAGE: standard Flex caps differ before/after 2026-09-01;
+# add-on paragraph does not explicitly subdivide its caps by purchase date.
+# Review the actual dashboard and account contract for boundary cases.
+# IMPORTANT: this is an existing requirement newly identified in the
+# 2026-11-04 review; the official page says 'Updated today' but does NOT
+# provide a precise effective date for the add-on payout-cap provision.
+# Core V1 cannot infer add-on purchase, account purchase vintage, payout
+# cycles, total profits, or withdrawal eligibility. Documentation ONLY;
+# do not encode these payout caps as daily loss limits or contract limits.
+# SOURCE: Tradeify official Select Flex and Select Daily Payout Policies,
+# reviewed 2026-11-04, section 'Payout Caps for Select Accounts with the
+# 50% Consistency Add-On':
+# https://help.tradeify.co/en/articles/12853966-select-flex-and-select-daily-payout-policies
+# OTHER CHECKS 2026-11-04: Lucid and Alpha official core risk/contract,
+# trading-time, payout and account-allocation pages and Tradeify Select,
+# Growth, Lightning and Elite pages reviewed; no additional VERIFIED
+# executable-profile correction justified in this review.
+# FTMO FUTURES and Earn2Trade FUTURES documentation retained; NO CFDs.
+# No L|, LI|, LN| records changed; all 1,162 original operational rows kept.
+# GitHub is NOT modified by this review. Explicit future authorization
+# is required before any GitHub publication.
+#
 # 2026-11-03 OFFICIAL RULE REVIEW - MATERIAL DOCUMENTATION OMISSIONS
 # GitHub main baseline read and verified: version 2026-11-02,
 # blob SHA 36f925e547daab8df0dd42103f8c918966958674.
