@@ -1,5 +1,45 @@
 # SAISEI Rule Library V1
-# LIBRARY_VERSION=2026-11-04
+# LIBRARY_VERSION=2026-11-05
+# 2026-11-05 OFFICIAL RULE REVIEW - TRADEIFY 300K PERMANENT PLAN
+# BASELINE: GitHub main 2026-11-04, Git blob SHA
+# 9803900878f65f38134ea3c640a356e402327870.
+# MATERIAL CHANGE / SUPERSEDING DOCUMENTATION - TRADEIFY SELECT 300K V2:
+# PREVIOUS LIBRARY (2026-10-29 historical comment): 300K V2 purchases
+# limited to 3 LIFETIME per user; up to 3 V2 funded accounts IN ADDITION
+# to the standard 5, permitting up to 8 total funded accounts.
+# CURRENT OFFICIAL: Select 300K V2 is PERMANENTLY available, no stock cap;
+# purchases limited to 5 per rolling 30 days per user (period begins at
+# first purchase); up to 3 funded 300K accounts, counted WITHIN the
+# ordinary total of 5 funded accounts (NOT 5+3). 300K purchases do not
+# consume the separate 15-evaluations/30-day allowance for other sizes.
+# 300K evaluations cannot be reset; KYC approval precedes purchase.
+# These limits are account-/purchase-wide; NOT contract sizing limits.
+# This CURRENT rule supersedes the conflicting 2026-10-29 historical note
+# below. That older comment is preserved as an audit trail, NOT current
+# guidance. Applies to current permanent V2 offer; legacy V1 account
+# contracts must be checked separately, do not silently reclassify V1.
+# SOURCE: Tradeify official '300k Select Account - Permanent Plan',
+# https://help.tradeify.co/en/articles/17845238-300k-select-account-permanent-plan
+# reviewed 2026-11-05; official page says 'Updated this week' but gives
+# NO exact effective timestamp. Treat availability/limits as current
+# official published terms, NOT proof of the original effective date.
+# CURRENT V2 NUMERIC CROSS-CHECK: Eval MLL $8,000 EOD / DLL $4,000,
+# max 16 minis/160 micros, 40% consistency, target $14,000; funded Flex
+# MLL $8,000 / DLL $4,000; funded Daily MLL $6,000 / DLL $3,000;
+# funded scaling T1..T5 = 3/4/6/10/16 minis (30/40/60/100/160
+# micros), triggered by EOD profits 0/1500/3000/5000/7000.
+# Current L|, LI| and LN| executable records ALREADY MATCH these values.
+# No executable changes warranted. Lucid and Alpha official core risk,
+# contracts/scaling, news, hours, payouts and automation checks produced
+# no additional verified material differences during this review.
+# CORE V1 LIMITATION: cannot count external purchases, household/firm-wide
+# funded allocation, KYC status, resets, or rolling 30-day windows;
+# manual dashboard verification remains required. Also cannot guarantee
+# cross-account hedging, EOD MLL, payout/consistency, news or automation
+# compliance. FTMO Futures and Earn2Trade Futures retained; no CFDs.
+# All 83 L|, 996 LI|, 83 LN| records preserved byte-for-byte (1162 total).
+# GitHub NOT modified. Publication requires fresh explicit authorization.
+#
 # 2026-11-04 OFFICIAL RULE REVIEW - MATERIAL PAYOUT OMISSION (DOCUMENTATION ONLY)
 # BASELINE: GitHub main version 2026-11-03, blob SHA
 # c72e1633b4d3016e5a173cd05a50ce3541e3f89a; reviewed 2026-11-04.
